@@ -10,7 +10,7 @@ app.listen(PORT,() => {
     console.log(`Server running in port ${PORT}`)
 })
 
-const persons =
+let persons =
     [
         {
             "id": 1,
@@ -54,5 +54,16 @@ app.get('/api/persons/:id', (request, response) => {
         return response.status(404).end('No such person founded')
     } else {
         response.json(person)
+    }
+})
+
+app.delete('api/persons/:id', (request, response) => {
+
+    const id = Number(request.params.id)
+    if (!persons.find(person => person.id === id)){
+        response.status(404).end('No such person founded')
+    } else {
+        persons = persons.filter(person => person.id !== id)
+        response.status(204).end()
     }
 })
