@@ -57,7 +57,7 @@ app.get('/api/persons/:id', (request, response) => {
     }
 })
 
-app.delete('api/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', (request, response) => {
 
     const id = Number(request.params.id)
     if (!persons.find(person => person.id === id)){
