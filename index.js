@@ -10,7 +10,7 @@ app.listen(PORT,() => {
     console.log(`Server running in port ${PORT}`)
 })
 
-const phonebook =
+const persons =
     [
         {
             "id": 1,
@@ -38,10 +38,21 @@ const phonebook =
 // })
 
 app.get('/api/persons', (request, response) => {
-    response.json(phonebook)
+    response.json(persons)
 })
 
 app.get('/info', (request, response) => {
 
-    response.send(`<p>Phonebook has info for ${phonebook.length} people</p><p>${Date(8.64e15).toString()}</p>`)
+    response.send(`<p>Phonebook has info for ${persons.length} people</p><p>${Date(8.64e15).toString()}</p>`)
+})
+
+app.get('/api/persons/:id', (request, response) => {
+
+    const id = Number(request.params.id)
+    const person = persons.find( person => person.id === id)
+    if (!person){
+        return response.status(404).end('No such person founded')
+    } else {
+        response.json(person)
+    }
 })
