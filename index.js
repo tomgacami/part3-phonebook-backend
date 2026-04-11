@@ -77,9 +77,20 @@ app.post('/api/persons', (request, response) => {
 
     const body = request.body
 
-    if (!body.name || !body.number){
+    if (!body.name){
+        console.log('Name is missing')
         return response.status(400).json({
-            error: 'name or number is missing'
+            error: 'name is missing'
+        })
+    } else if (!body.number){
+        console.log('Number is missing')
+        return response.status(400).json({
+            error: 'number is missing'
+        })
+    } else if (persons.find(person => person.name.toLowerCase() === body.name.toLowerCase())) {
+        console.log('Contact name already created')
+        return response.status(400).json({
+            error: 'Contact name already created'
         })
     }
 
