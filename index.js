@@ -5,6 +5,10 @@ const app = express()
 
 app.use(express.json())
 
+const morgan = require('morgan')
+// morgan('tiny')
+app.use(morgan('tiny'))
+
 const PORT = 3001
 app.listen(PORT,() => {
     console.log(`Server running in port ${PORT}`)
@@ -78,19 +82,16 @@ app.post('/api/persons', (request, response) => {
     const body = request.body
 
     if (!body.name){
-        console.log('Name is missing')
         return response.status(400).json({
             error: 'name is missing'
         })
     } else if (!body.number){
-        console.log('Number is missing')
         return response.status(400).json({
             error: 'number is missing'
         })
     } else if (persons.find(person => person.name.toLowerCase() === body.name.toLowerCase())) {
-        console.log('Contact name already created')
         return response.status(400).json({
-            error: 'Contact name already created'
+            error: 'Contact name already created, name must be unique'
         })
     }
 
