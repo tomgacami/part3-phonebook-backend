@@ -6,8 +6,13 @@ const app = express()
 app.use(express.json())
 
 const morgan = require('morgan')
-// morgan('tiny')
-app.use(morgan('tiny'))
+
+morgan.token('custom', function (request) {
+    return JSON.stringify(request.body)
+})
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :custom'))
+
+
 
 const PORT = 3001
 app.listen(PORT,() => {
