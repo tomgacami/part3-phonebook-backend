@@ -12,9 +12,11 @@ morgan.token('custom', function (request) {
 })
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :custom'))
 
+const cors = require('cors')
+app.use(cors())
 
 
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT,() => {
     console.log(`Server running in port ${PORT}`)
 })
@@ -40,6 +42,16 @@ let persons =
             "id": 4,
             "name": "Mary Poppendieck",
             "number": "39-23-6423122"
+        },
+        {
+            "id": 11111111,
+            "name": "Ali",
+            "number": "1234567890"
+        },
+        {
+            "id": 2222222,
+            "name": "Tomy",
+            "number": "0987654321"
         }
     ]
 // app.get('/', (request, response) =>{
@@ -78,7 +90,7 @@ app.delete('/api/persons/:id', (request, response) => {
 })
 
 const generateId = () => {
-    const maxId = 1000
+    const maxId = 10000
     return Math.floor(Math.random() * maxId)
 }
 
