@@ -1,0 +1,26 @@
+# fly.toml app configuration file generated for phonebook-backend-proud-paper-8873 on 2026-04-15T17:51:04-03:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'phonebook-backend-proud-paper-8873'
+primary_region = 'gru'
+
+[build]
+
+[env]
+    PORT="3001"
+
+[http_service]
+  internal_port = 3001
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+[[vm]]
+  memory = '256mb'
+  cpu_kind = 'shared'
+  cpus = 1
+  memory_mb = 256
