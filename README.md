@@ -1,7 +1,3 @@
 
-Online app on Fly.io
-https://phonebook-backend-proud-paper-8873.fly.dev/api/persons
-
-
-Online app on Fly.io after compile frontend 
-https://phonebook-backend-proud-paper-8873.fly.dev/
+Online app on Render
+https://part3-phonebook-backend-hh8f.onrender.com/
