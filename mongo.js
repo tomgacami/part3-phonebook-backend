@@ -8,15 +8,6 @@ if (process.argv.length < 3){
 
 const password = process.argv[2]
 
-// let number =0
-// process.argv.forEach((param,number) => {
-//
-//     console.log(`posicion ${number} is ${param}`)
-//     number = +1
-// })
-
-
-
 const url =
     `mongodb+srv://admin_db_user:${password}@cluster0.yijnldi.mongodb.net/phonebookApp?appName=Cluster0`
 
