@@ -116,17 +116,28 @@ app.post('/api/persons', (request, response) => {
         return response.status(400).json({
             error: 'number is missing'
         })
-    } else if (persons.find(person => person.name.toLowerCase() === body.name.toLowerCase())) {
-        return response.status(400).json({
-            error: 'Contact name already created, name must be unique'
-        })
     }
+    // else if (persons.find(person => person.name.toLowerCase() === body.name.toLowerCase())) {
+    //     return response.status(400).json({
+    //         error: 'Contact name already created, name must be unique'
+    //     })
+    // }
 
-    const person = {
+    const person = new Person({
         name: body.name,
         number: body.number,
-        id: generateId()
-    }
-    persons = persons.concat(person)
-    response.json(person)
+    })
+
+    person.save().then(savedContact => {
+        response.json(savedContact)
+        console.log('New contact created')
+    })
+
+    // const person = {
+    //     name: body.name,
+    //     number: body.number,
+    //     id: generateId()
+    // }
+    // persons = persons.concat(person)
+    // response.json(person)
 })
