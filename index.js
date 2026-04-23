@@ -90,13 +90,21 @@ app.get('/api/persons/:id', (request, response) => {
 
 app.delete('/api/persons/:id', (request, response) => {
 
-    const id = Number(request.params.id)
-    if (!persons.find(person => person.id === id)){
-        response.status(404).end('No such person founded')
-    } else {
-        persons = persons.filter(person => person.id !== id)
-        response.status(204).end()
-    }
+    Person.findByIdAndDelete(request.params.id)
+        .then(result => {
+            response.status(204).end()
+        })
+        .catch(error => {
+            console.log(error)
+        })
+
+    // const id = Number(request.params.id)
+    // if (!persons.find(person => person.id === id)){
+    //     response.status(404).end('No such person founded')
+    // } else {
+    //     persons = persons.filter(person => person.id !== id)
+    //     response.status(204).end()
+    // }
 })
 
 const generateId = () => {
