@@ -1,4 +1,3 @@
-// console.log('Hello mundossssssssssssssssssssss')
 
 const express = require('express')
 const app = express()
@@ -61,12 +60,8 @@ let persons =
             "number": "0987654321"
         }
     ]
-// app.get('/', (request, response) =>{
-//     response.send('<h1>Hello worldssssssssssssssssssssss</h1>')
-// })
 
 app.get('/api/persons', (request, response) => {
-    // response.json(persons)
     Person.find({}).then(persons => {
         response.json(persons)
     })
@@ -107,10 +102,6 @@ app.delete('/api/persons/:id', (request, response) => {
     // }
 })
 
-const generateId = () => {
-    const maxId = 10000
-    return Math.floor(Math.random() * maxId)
-}
 
 app.post('/api/persons', (request, response) => {
 
@@ -141,11 +132,4 @@ app.post('/api/persons', (request, response) => {
         console.log('New contact created')
     })
 
-    // const person = {
-    //     name: body.name,
-    //     number: body.number,
-    //     id: generateId()
-    // }
-    // persons = persons.concat(person)
-    // response.json(person)
 })
