@@ -2,12 +2,12 @@
 const express = require('express')
 const app = express()
 
+app.use(express.json())
+app.use(express.static('dist'))
+
 require('dotenv').config()
 
 const Person = require('./models/person')
-
-app.use(express.json())
-app.use(express.static('dist'))
 
 const morgan = require('morgan')
 
@@ -61,37 +61,40 @@ let persons =
         }
     ]
 
-app.get('/api/persons', (request, response) => {
-    Person.find({}).then(persons => {
-        response.json(persons)
-    })
+app.get('/api/persons', (request, response, next) => {
+    Person.find({})
+        .then(persons => {
+            response.json(persons)
+        })
+        .catch (error => {next(error)})
 })
 
 app.get('/info', (request, response) => {
 
-    response.send(`<p>Phonebook has info for ${persons.length} people</p><p>${Date(8.64e15).toString()}</p>`)
+    response.send(`<p>Phonebook has info for ${persons.length} people</p><p>${Date().toString()}</p>`)
 })
 
-app.get('/api/persons/:id', (request, response) => {
+app.get('/api/persons/:id', (request, response, next) => {
 
-    const id = Number(request.params.id)
-    const person = persons.find( person => person.id === id)
-    if (!person){
-        return response.status(404).end('No such person founded')
-    } else {
-        response.json(person)
-    }
+    Person.findById(request.params.id)
+        .then(person => {
+            if (person) {
+                response.json(person)
+            } else {
+                response.status(404).json({error: 'Person not found'})
+            }
+        })
+        .catch (error => { next(error) })
+
 })
 
-app.delete('/api/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', (request, response, next) => {
 
     Person.findByIdAndDelete(request.params.id)
         .then(result => {
             response.status(204).end()
         })
-        .catch(error => {
-            console.log(error)
-        })
+        .catch(error => {next(error)})
 
     // const id = Number(request.params.id)
     // if (!persons.find(person => person.id === id)){
@@ -103,7 +106,7 @@ app.delete('/api/persons/:id', (request, response) => {
 })
 
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
 
     const body = request.body
 
@@ -127,9 +130,24 @@ app.post('/api/persons', (request, response) => {
         number: body.number,
     })
 
-    person.save().then(savedContact => {
-        response.json(savedContact)
-        console.log('New contact created')
-    })
+    person
+        .save()
+        .then(savedContact => {
+            response.json(savedContact)
+            console.log('New contact created')
+        })
+        .catch(error => {next(error)})
 
 })
+
+const errorhandler = (error, request, response, next) => {
+
+    console.error(error.message)
+
+    if (error.name === 'CastError') {
+        return response.status(400).send({error: 'malformatted id'})
+    }
+
+    next(error)
+}
+app.use(errorhandler)
