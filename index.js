@@ -71,7 +71,14 @@ app.get('/api/persons', (request, response, next) => {
 
 app.get('/info', (request, response) => {
 
-    response.send(`<p>Phonebook has info for ${persons.length} people</p><p>${Date().toString()}</p>`)
+    Person.countDocuments({})
+        .then(count => {
+            console.log('Cuantos son: ', count)
+            response.send(
+                `<p>Phonebook has info for ${count} people</p><p>${Date().toString()}</p>`
+            )
+        })
+        .catch(error => next(error))
 })
 
 app.get('/api/persons/:id', (request, response, next) => {
@@ -96,13 +103,6 @@ app.delete('/api/persons/:id', (request, response, next) => {
         })
         .catch(error => {next(error)})
 
-    // const id = Number(request.params.id)
-    // if (!persons.find(person => person.id === id)){
-    //     response.status(404).end('No such person founded')
-    // } else {
-    //     persons = persons.filter(person => person.id !== id)
-    //     response.status(204).end()
-    // }
 })
 
 
@@ -119,11 +119,6 @@ app.post('/api/persons', (request, response, next) => {
             error: 'number is missing'
         })
     }
-    // else if (persons.find(person => person.name.toLowerCase() === body.name.toLowerCase())) {
-    //     return response.status(400).json({
-    //         error: 'Contact name already created, name must be unique'
-    //     })
-    // }
 
     const person = new Person({
         name: body.name,
