@@ -27,39 +27,39 @@ app.listen(PORT,() => {
 
 
 
-let persons =
-    [
-        {
-            "id": 1,
-            "name": "Arto Hellas",
-            "number": "040-123456"
-        },
-        {
-            "id": 2,
-            "name": "Ada Lovelace",
-            "number": "39-44-5323523"
-        },
-        {
-            "id": 3,
-            "name": "Dan Abramov",
-            "number": "12-43-234345"
-        },
-        {
-            "id": 4,
-            "name": "Mary Poppendieck",
-            "number": "39-23-6423122"
-        },
-        {
-            "id": 11111111,
-            "name": "Ali",
-            "number": "1234567890"
-        },
-        {
-            "id": 2222222,
-            "name": "Tomy",
-            "number": "0987654321"
-        }
-    ]
+// let persons =
+//     [
+//         {
+//             "id": 1,
+//             "name": "Arto Hellas",
+//             "number": "040-123456"
+//         },
+//         {
+//             "id": 2,
+//             "name": "Ada Lovelace",
+//             "number": "39-44-5323523"
+//         },
+//         {
+//             "id": 3,
+//             "name": "Dan Abramov",
+//             "number": "12-43-234345"
+//         },
+//         {
+//             "id": 4,
+//             "name": "Mary Poppendieck",
+//             "number": "39-23-6423122"
+//         },
+//         {
+//             "id": 11111111,
+//             "name": "Ali",
+//             "number": "1234567890"
+//         },
+//         {
+//             "id": 2222222,
+//             "name": "Tomy",
+//             "number": "0987654321"
+//         }
+//     ]
 
 app.get('/api/persons', (request, response, next) => {
     Person.find({})
@@ -69,7 +69,7 @@ app.get('/api/persons', (request, response, next) => {
         .catch (error => {next(error)})
 })
 
-app.get('/info', (request, response) => {
+app.get('/info', (request, response, next) => {
 
     Person.countDocuments({})
         .then(count => {
@@ -88,7 +88,7 @@ app.get('/api/persons/:id', (request, response, next) => {
             if (person) {
                 response.json(person)
             } else {
-                response.status(404).json({error: 'Person not found'})
+                response.status(404).json({ error: 'Person not found' })
             }
         })
         .catch (error => { next(error) })
@@ -98,7 +98,7 @@ app.get('/api/persons/:id', (request, response, next) => {
 app.delete('/api/persons/:id', (request, response, next) => {
 
     Person.findByIdAndDelete(request.params.id)
-        .then(result => {
+        .then(() => {
             response.status(204).end()
         })
         .catch(error => {next(error)})
@@ -138,7 +138,7 @@ app.post('/api/persons', (request, response, next) => {
 
 app.put ('/api/persons/:id', (request, response, next) => {
 
-    const {name, number} = request.body
+    const { name, number } = request.body
 
     // const person = {
     //     name: body.name,
@@ -147,8 +147,8 @@ app.put ('/api/persons/:id', (request, response, next) => {
 
     Person.findByIdAndUpdate(
         request.params.id,
-        {name, number}
-        ,{returnDocument:'after', runValidators: true, context:'query'})
+        { name, number }
+        ,{ returnDocument:'after', runValidators: true, context:'query' })
         .then(updatedPerson => {
             response.json(updatedPerson)
         })
@@ -160,9 +160,9 @@ const errorhandler = (error, request, response, next) => {
     console.error(error.message)
 
     if (error.name === 'CastError') {
-        return response.status(400).send({error: 'malformatted id'})
+        return response.status(400).send({ error: 'malformatted id' })
     } else if (error.name === 'ValidationError') {
-        return response.status(400).json({error: error.message})
+        return response.status(400).json({ error: error.message })
     }
 
     next(error)
