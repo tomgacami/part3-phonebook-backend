@@ -17,11 +17,17 @@ mongoose.connect(url)
 const personSchema = new mongoose.Schema({
     name: {
         type: String,
-        minLength: 3,
+        minLength: [3, 'Name must be at least 3 characters'],
         required: true
     },
     number: {
-        type: String
+        type: String,
+        minLength: [8,'Number must be at least 8 characters'],
+        validate: {
+            validator: v => /^\d{2,3}-\d{5,}$/.test(v) ,
+            message: prop =>
+                `${prop.value} is not a valid format phone number`
+        }
     },
 })
 
